@@ -4,7 +4,7 @@
   "description": "Starter package.json template",
   "main": "main.js",
   "scripts": {
-    "test": "jest 2> output.txt --forceExit  --detectOpenHandles",
+    "test": "npx jest --forceExit --detectOpenHandles",
     "start": "node main.js &"
   },
   "repository": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/acciojob/promises-in-node.js#readme",
   "devDependencies": {
-    "jest": "^29.5.0"
+    "jest": "^29.7.0"
   },
   "dependencies": {
     "assert": "^2.1.0",
