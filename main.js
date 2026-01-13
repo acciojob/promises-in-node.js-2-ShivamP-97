@@ -8,11 +8,8 @@ function readFile(filePath) {
     }
 
     fs.readFile(filePath, 'utf8', (err, data) => {
-      if (err) {
-        reject(err); 
-      } else {
-        resolve(data);
-      }
+      if (err) reject(err);
+      else resolve(data);
     });
   });
 }
@@ -20,25 +17,19 @@ function readFile(filePath) {
 function sumColumn(filePath, columnName) {
   return readFile(filePath)
     .then((data) => {
-      if (!data || !data.trim()) {
-        throw "CSV file is empty.";
-      }
+      if (!data || !data.trim()) throw "CSV file is empty.";
 
       const rows = data.trim().split("\n");
-      if (rows.length < 2) {
-        throw "CSV file is empty.";
-      }
+      if (rows.length < 2) throw "CSV file is empty.";
 
-      const headers = rows[0].split(",");
+      const headers = rows[0].split(',').map(h => h.trim());
       const colIndex = headers.indexOf(columnName);
 
-      if (colIndex === -1) {
-        throw `Column '${columnName}' not found in the CSV.`;
-      }
+      if (colIndex === -1) throw `Column '${columnName}' not found in the CSV.`;
 
       let sum = 0;
       for (let i = 1; i < rows.length; i++) {
-        const cols = rows[i].split(",");
+        const cols = rows[i].split(',').map(c => c.trim());
         sum += parseFloat(cols[colIndex]);
       }
 
@@ -46,17 +37,13 @@ function sumColumn(filePath, columnName) {
     });
 }
 
+// Command-line args
 const filePath = process.argv[2];
 const columnName = process.argv[3];
 
 sumColumn(filePath, columnName)
-  .then((sum) => {
-    console.log(`The Sum of ${columnName} is ${sum}`);
-  })
-  .catch((err) => {
-    if (typeof err === "string") {
-      console.log(err); 
-    } else {
-      console.log(err.message); 
-    }
+  .then(sum => console.log(`The Sum of ${columnName} is ${sum}`))
+  .catch(err => {
+    if (typeof err === "string") console.log(err);
+    else console.log(err.message);
   });
